@@ -51,6 +51,7 @@ namespace GpxTools.Gpx
         public double Longitude { get; set; }
         public double? Elevation { get; set; }
         public DateTime? Time { get; set; }
+        public double DistanceFromStart { get; set; }
 
         public double? MagneticVar
         {
@@ -180,7 +181,7 @@ namespace GpxTools.Gpx
             double cos = Math.Cos(deltaLongitude) * Math.Cos(thisLatitude) * Math.Cos(otherLatitude) +
                 Math.Sin(thisLatitude) * Math.Sin(otherLatitude);
 
-            return EARTH_RADIUS * Math.Acos(cos>1 ? 1 : cos);
+            return EARTH_RADIUS * Math.Acos(cos > 1 ? 1 : cos);
         }
         public double? GetElevationDifFrom(GpxPoint other)
         {
@@ -386,8 +387,17 @@ namespace GpxTools.Gpx
 
         public GpxPoint AddPoint(T point)
         {
-            Points_.Add(point);
             return point;
+        }
+        public void CalculateDistanceFromStart()
+        {
+            double distanceFromStart = 0;
+            for (int i = 1; i < Points_.Count; i++)
+            {
+                if (EndPoint != null)
+                    distanceFromStart += Points_[i].GetDistanceFrom(Points_[i - 1]);
+                Points_[i].DistanceFromStart = distanceFromStart;
+            }
         }
 
         public T StartPoint
@@ -434,7 +444,8 @@ namespace GpxTools.Gpx
                     Longitude = gpxPoint.Longitude,
                     Latitude = gpxPoint.Latitude,
                     Elevation = gpxPoint.Elevation,
-                    Time = gpxPoint.Time
+                    Time = gpxPoint.Time,
+                    DistanceFromStart = gpxPoint.DistanceFromStart
                 };
 
                 points.Add(point);

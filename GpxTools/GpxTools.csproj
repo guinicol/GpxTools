@@ -6,6 +6,10 @@
     <PackageId>GpxTools.macharius40</PackageId>
     <PackageProjectUrl>https://github.com/macharius40/GpxTools</PackageProjectUrl>
     <Company>macharius40</Company>
+    <PackageLicenseUrl>https://github.com/macharius40/GpxTools/blob/master/LICENSE.md</PackageLicenseUrl>
+    <Copyright></Copyright>
+    <NeutralLanguage></NeutralLanguage>
+    <Version>1.0.1</Version>
   </PropertyGroup>
 
 </Project>

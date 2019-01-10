@@ -35,7 +35,12 @@ namespace GpxTools
         {
             get
             {
-                var time = PosHeightDif / AverageAscSpeed + NegHeightDif / AverageDescSpeed + (TotalLenght - DescDist - AscDist) / AverageFlatSpeed;
+                var lenght = TotalLenght;
+                if (PosHeightDif / (AscDist * 1000) * 100 > LimitSlope)
+                    lenght -= AscDist;
+                if (NegHeightDif / (DescDist * 1000) * 100 > LimitSlope)
+                    lenght -= DescDist;
+                var time = PosHeightDif / AverageAscSpeed + NegHeightDif / AverageDescSpeed + lenght / AverageFlatSpeed;
                 try
                 {
                     return TimeSpan.FromHours(time);
@@ -87,6 +92,12 @@ namespace GpxTools
         /// Limit of Elevation difference calculation
         /// </summary>
         public int LimitElevationDif { get; set; }
+
+        /// <summary>
+        /// Limit of Slope for Time Calculation.(HeightDif/AscendLenght*100)
+        /// Under this limit. Time Calculation don't care of Height Dif.
+        /// </summary>
+        public int LimitSlope { get; set; }
         /// <summary>
         /// speed on Flat terrain in Meter / hour
         /// Default 5000m/h
@@ -111,7 +122,12 @@ namespace GpxTools
             get
             {
                 if (gpxReader.Track != null)
-                    return gpxReader.Track.ToGpxPoints();
+                {
+                    var gpxpoints = gpxReader.Track.ToGpxPoints();
+                    //provisoire need to be move in GpxTrack / GpxSegment
+                    gpxpoints.CalculateDistanceFromStart();
+                    return gpxpoints;
+                }
                 else
                     return null;
             }
@@ -122,6 +138,7 @@ namespace GpxTools
         private GpxAnalyser()
         {
             LimitElevationDif = 10;
+            LimitSlope = 6;
             AverageAscSpeed = 350;
             AverageDescSpeed = 550;
             AverageFlatSpeed = 5;
@@ -176,10 +193,11 @@ namespace GpxTools
             {
 
             }
-            foreach (var point in Points)
+            Points.CalculateDistanceFromStart();
+            for (int i = 1; i < Points.Count; i++)
             {
-                PosHeightDif += GetPositiveHeightDif(point);
-                NegHeightDif += GetNegativeHeightDif(point);
+                PosHeightDif += GetPositiveHeightDif(Points[i]);
+                NegHeightDif += GetNegativeHeightDif(Points[i]);
             }
         }
         private GpxPoint lastLimitPointElePos;
