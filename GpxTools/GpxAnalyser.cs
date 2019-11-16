@@ -8,6 +8,12 @@ namespace GpxTools
     public class GpxAnalyser
     {
         /// <summary>
+        /// Options of analyser
+        /// </summary>
+        public GpxAnalyserOptions Options { get; set; }
+       
+
+        /// <summary>
         /// Positive height difference
         /// </summary>
         public double PosHeightDif { get; internal set; }
@@ -26,6 +32,13 @@ namespace GpxTools
                 if (Points != null)
                     return Points.GetLength();
                 return 0;
+            }
+        }
+        public double KilometerEffort
+        {
+            get
+            {
+                return TotalLenght + PosHeightDif / Options.KmEffortAscCoefficient + NegHeightDif / Options.KmEffortDescCoefficient;
             }
         }
         /// <summary>
@@ -51,6 +64,18 @@ namespace GpxTools
                 }
             }
         }
+
+        /// <summary>
+        /// Calculation of time based on Kilometer-effort algorithm
+        /// </summary>
+        public TimeSpan CalculatedDurationTimeKmEffort
+        {
+            get
+            {
+                return TimeSpan.FromHours(KilometerEffort / Options.KmEffortHour);
+            }
+        }
+        
         /// <summary>
         /// Real Duration time extracted from the track
         /// </summary>
@@ -87,32 +112,12 @@ namespace GpxTools
                 return 0;
             }
         }
-
-        /// <summary>
-        /// Limit of Elevation difference calculation
-        /// </summary>
-        public int LimitElevationDif { get; set; }
-
         /// <summary>
         /// Limit of Slope for Time Calculation.(HeightDif/AscendLenght*100)
         /// Under this limit. Time Calculation don't care of Height Dif.
         /// </summary>
         public int LimitSlope { get; set; }
-        /// <summary>
-        /// speed on Flat terrain in Meter / hour
-        /// Default 5000m/h
-        /// </summary>
-        public int AverageFlatSpeed { get; set; }
-        /// <summary>
-        /// Ascentional speed in KiloMeter / Hour
-        /// Default 350m/h
-        /// </summary>
-        public int AverageAscSpeed { get; set; }
-        /// <summary>
-        /// Descending speed in Meter / Hour
-        /// Default 550m/h
-        /// </summary>
-        public int AverageDescSpeed { get; set; }
+
 
         /// <summary>
         /// List of points of the track
@@ -134,20 +139,27 @@ namespace GpxTools
         }
 
         private readonly GpxReader gpxReader;
-
-        private GpxAnalyser()
+        /// <summary>
+        /// Create an instance of a Gpx Analyser
+        /// </summary>
+        /// <param name="options">options of Analyser</param>
+        private GpxAnalyser(GpxAnalyserOptions options = null)
         {
-            LimitElevationDif = 10;
-            LimitSlope = 6;
-            AverageAscSpeed = 350;
-            AverageDescSpeed = 550;
-            AverageFlatSpeed = 5;
+            if(options != null)
+            {
+                Options = options;
+            } 
+            else
+            {
+                Options = new GpxAnalyserOptions();
+            }
         }
         /// <summary>
         /// Create an instance of a Gpx Analyser
         /// </summary>
         /// <param name="gpxReader">Gpx Reader cannot be null</param>
-        public GpxAnalyser(GpxReader gpxReader) : this()
+        /// <param name="options">options of Analyser</param>
+        public GpxAnalyser(GpxReader gpxReader, GpxAnalyserOptions options = null) : this(options)
         {
             this.gpxReader = gpxReader ?? throw new ArgumentNullException(nameof(gpxReader));
         }
@@ -155,7 +167,8 @@ namespace GpxTools
         /// Create an instance of a Gpx Analyser
         /// </summary>
         /// <param name="Url">Url of gpx File</param>
-        public GpxAnalyser(string url) : this()
+        /// <param name="options">options of Analyser</param>
+        public GpxAnalyser(string url, GpxAnalyserOptions options = null) : this(options)
         {
             Stream stream = null;
             if (IsLocalPath(url))
@@ -215,7 +228,7 @@ namespace GpxTools
             }
             if (heightDif > 0)
             {
-                if (heightDif < LimitElevationDif)
+                if (heightDif < Options.LimitElevationDif)
                 {
                     return 0;
                 }
@@ -229,7 +242,7 @@ namespace GpxTools
             }
             else
             {
-                if (-heightDif > LimitElevationDif)
+                if (-heightDif > Options.LimitElevationDif)
                 {
                     lastLimitPointElePos = null;
                 }
@@ -252,7 +265,7 @@ namespace GpxTools
             }
             if (heightDif > 0)
             {
-                if (heightDif < LimitElevationDif)
+                if (heightDif < Options.LimitElevationDif)
                 {
                     return 0;
                 }
@@ -266,7 +279,7 @@ namespace GpxTools
             }
             else
             {
-                if (-heightDif > LimitElevationDif)
+                if (-heightDif > Options.LimitElevationDif)
                 {
                     lastLimitPointEleNeg = null;
                 }

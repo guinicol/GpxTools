@@ -20,9 +20,11 @@ namespace GpxTools.Test
             Console.WriteLine($"distance : {Math.Round(GpxAnalyser.TotalLenght, 2)}");
             Console.WriteLine($"denivele + : {Math.Round(GpxAnalyser.PosHeightDif, 2)}");
             Console.WriteLine($"denivele - : {Math.Round(GpxAnalyser.NegHeightDif, 2)}");
+            Console.WriteLine($"Kilometer-effort : {Math.Round(GpxAnalyser.KilometerEffort)}");
             Console.WriteLine($"Alt Max : {Math.Round(GpxAnalyser.MaxElevation, 0)}");
             Console.WriteLine($"Alt Min : {Math.Round(GpxAnalyser.MinElevation, 0)}");
             Console.WriteLine($"CalculatedTime : {GpxAnalyser.CalculatedDurationTime}");
+            Console.WriteLine($"CalculatedTime (Km-e algorithm) : {GpxAnalyser.CalculatedDurationTimeKmEffort}");
             Console.WriteLine($"Time : {GpxAnalyser.RealDurationTime}");
             for (int i = 0; i < Console.BufferWidth - 2; i++)
             {
