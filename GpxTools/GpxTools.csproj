@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netstandard2.1</TargetFramework>
     <Authors>macharius40</Authors>
     <PackageId>GpxTools.macharius40</PackageId>
     <PackageProjectUrl>https://github.com/macharius40/GpxTools</PackageProjectUrl>
@@ -9,7 +9,14 @@
     <PackageLicenseUrl>https://github.com/macharius40/GpxTools/blob/master/LICENSE.md</PackageLicenseUrl>
     <Copyright></Copyright>
     <NeutralLanguage></NeutralLanguage>
-    <Version>1.0.2</Version>
+    <Version>1.1.1</Version>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\LICENSE.md">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
 
 </Project>
