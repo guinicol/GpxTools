@@ -49,11 +49,11 @@ namespace GpxTools
             get
             {
                 var lenght = TotalLenght;
-                if (PosHeightDif / (AscDist * 1000) * 100 > LimitSlope)
+                if (PosHeightDif / (AscDist * 1000) * 100 > Options.LimitSlope)
                     lenght -= AscDist;
-                if (NegHeightDif / (DescDist * 1000) * 100 > LimitSlope)
+                if (NegHeightDif / (DescDist * 1000) * 100 > Options.LimitSlope)
                     lenght -= DescDist;
-                var time = PosHeightDif / AverageAscSpeed + NegHeightDif / AverageDescSpeed + lenght / AverageFlatSpeed;
+                var time = PosHeightDif / Options.AverageAscSpeed + NegHeightDif / Options.AverageDescSpeed + lenght / Options.AverageFlatSpeed;
                 try
                 {
                     return TimeSpan.FromHours(time);
@@ -112,11 +112,7 @@ namespace GpxTools
                 return 0;
             }
         }
-        /// <summary>
-        /// Limit of Slope for Time Calculation.(HeightDif/AscendLenght*100)
-        /// Under this limit. Time Calculation don't care of Height Dif.
-        /// </summary>
-        public int LimitSlope { get; set; }
+        
 
 
         /// <summary>

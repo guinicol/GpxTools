@@ -40,6 +40,11 @@ namespace GpxTools
         /// </summary>
         public int LimitElevationDif { get; set; }
         /// <summary>
+        /// Limit of Slope for Time Calculation.(HeightDif/AscendLenght*100)
+        /// Under this limit. Time Calculation don't care of Height Dif.
+        /// </summary>
+        public int LimitSlope { get; set; }
+        /// <summary>
         /// speed on Flat terrain in Meter / hour
         /// Default 5000m/h
         /// </summary>
