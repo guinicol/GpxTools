@@ -26,6 +26,7 @@ namespace GpxTools.Test
             Console.WriteLine($"CalculatedTime : {GpxAnalyser.CalculatedDurationTime}");
             Console.WriteLine($"CalculatedTime (Km-e algorithm) : {GpxAnalyser.CalculatedDurationTimeKmEffort}");
             Console.WriteLine($"Time : {GpxAnalyser.RealDurationTime}");
+            Console.WriteLine($"Type : {GpxAnalyser.TrackType}");
             for (int i = 0; i < Console.BufferWidth - 2; i++)
             {
                 Console.Write("-");

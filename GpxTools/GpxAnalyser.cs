@@ -208,6 +208,7 @@ namespace GpxTools
                 PosHeightDif += GetPositiveHeightDif(Points[i]);
                 NegHeightDif += GetNegativeHeightDif(Points[i]);
             }
+            TrackTypeAnalysis();
         }
         private GpxPoint lastLimitPointElePos;
         private double AscDist;
@@ -282,6 +283,44 @@ namespace GpxTools
             }
             return 0;
         }
+        private void TrackTypeAnalysis()
+        {
+            int i = 0;
+            int y = Points.Count-1;
+            var SamePoint = 0;
+            while (i < y)
+            {
+                var p1 = Points[i];
+                var p2 = Points[y];
+                var dis = p1.GetDistanceFrom(p2);
+                if(dis<0.55)
+                {
+                    SamePoint += 1;
+                }
+                i++;
+                y--;
+            }
+            var ratio = (double)SamePoint / (Points.Count / 2);
+            if (ratio<=0.06)
+            {
+                TrackType = TrackType.Across;
+            } else if (ratio <=0.55) {
+                TrackType = TrackType.Loop;
+            } else
+            {
+                TrackType = TrackType.RoundTrip;
+            }
+        }
+        /// <summary>
+        /// BETA estimate if the track is a LOOP or a RoundTrip or only a road across
+        /// </summary>
+        public TrackType TrackType { get; internal set; }
 
+    }
+    public enum TrackType
+    {
+        RoundTrip,
+        Loop,
+        Across,
     }
 }

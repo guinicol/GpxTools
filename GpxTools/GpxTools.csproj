@@ -6,13 +6,18 @@
     <PackageId>GpxTools.macharius40</PackageId>
     <PackageProjectUrl>https://github.com/macharius40/GpxTools</PackageProjectUrl>
     <Company>macharius40</Company>
-    <PackageLicenseUrl>https://github.com/macharius40/GpxTools/blob/master/LICENSE.md</PackageLicenseUrl>
+    <PackageLicenseUrl></PackageLicenseUrl>
     <Copyright></Copyright>
     <NeutralLanguage></NeutralLanguage>
-    <Version>1.1.1</Version>
+    <Version>1.1.2</Version>
+    <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="..\LICENSE.md">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
     <None Include="..\LICENSE.md">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
